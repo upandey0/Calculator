@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        body{
+            background-color: rgba(42, 33, 33, 0.8);
+        }
+        #val{
+            width: 810px;
+            height: 3rem;
+            justify-content: center;
+            background-color: rgb(79, 59, 59);
+            border: none;
+            text-align: center;
+            font-size: 2.5rem;
+            color: blueviolet;
+        }
+        .ans{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            text-align: right;
+        }
+        #calc{ 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+        #val:focus{
+            outline: none;
+        }
+        
+        button{
+            height: 80px;
+            width: 200px;
+            /* padding: 20px 80px; */
+            background-color: white;
+            font-size: 3rem;
+            border-radius: 10px;
+            box-sizing: border-box;
+            
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color:#ccad20;text-align:center;">CALCULATOR</h1>
+    <div id="container">
+            <div class="ans"><input type="text" id="val" readonly></div>
+    </div>
+    <div id="calc">
+        <table>
+            <tr>
+                <td><button>(</button></td>
+                <td><button>)</button></td>
+                <td><button style="background-color: #f01600; font-weight: bold; color: #ecf0f1;">C</button></td>
+                <td><button>%</button></td>
+            </tr>
+            <tr>
+                <td><button>7</button></td>
+                <td><button>8</button></td>
+                <td><button>9</button></td>
+                <td><button>X</button></td>
+            </tr>
+            <tr>
+                <td><button>4</button></td>
+                <td><button>5</button></td>
+                <td><button>6</button></td>
+                <td><button>-</button></td>
+            </tr>
+            <tr>
+                <td><button>1</button></td>
+                <td><button>2</button></td>
+                <td><button>3</button></td>
+                <td><button>+</button></td>
+            </tr>
+            <tr>
+                <td><button>0</button></td>
+                <td><button style="font-weight: bold;">.</button></td>
+                <td><button>/</button></td>
+                <td><button style="background-color: #25db72; font-weight: bold; color: #ecf0f1;">=</button></td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        let screen = document.getElementById('val'); // Taken Input Field
+        let buttons = document.querySelectorAll('button'); // selected all button 
+        let screenValue = "";
+        for(item of buttons)
+        {
+            item.addEventListener("click",(e)=>{
+                buttonText = e.target.innerText;
+                if(buttonText=="X")
+                {
+                    buttonText = "*";
+                    screenValue +=buttonText;
+                    console.log(screenValue);
+                    screen.value = screenValue; // display in Input 
+                }
+                else if(buttonText == "C"){
+                    
+                    screenValue = "";
+                    screen.value = screenValue;
+                }
+                else if(buttonText == "=")
+                {
+                    checkforBracket();
+                }
+                else{
+                    screenValue += buttonText;
+                    screen.value = screenValue;
+                }
+                
+            });
+        }
+
+        document.addEventListener("keydown",(e)=>{
+            console.log(e.which);
+            if(e.shiftKey==57)
+            {
+                e.key = "(";
+            }
+            else if(e.shiftKey == 48)
+            {
+                e.key = ")";
+            }
+            else if(e.shiftKey == 53){
+                e.key = "%";
+            }
+            if(e.keyCode == 88)
+            {
+                screenValue += "*";
+                screen.value = screenValue;
+            }
+
+            if (
+                 e.key <= 9 ||
+                 e.key == "+" ||
+                 e.key == "-" ||
+                 e.key == "*" ||
+                 e.key == "." ||
+                 e.key == "/" ||
+                 e.key == "%" ||
+                 e.key == "(" ||
+                 e.key == ")"
+    ) {
+        screenValue += e.key;
+        screen.value = screenValue;
+    }
+
+    if(e.keyCode == 13 || e.keyCode == 187)
+                {
+                    checkforBracket();
+                }
+                else if(e.keyCode == 46)
+                {
+                    screenValue = "";
+                    screen.value = screenValue;
+                    console.clear();
+                }
+        });
+
+        window.onerror =  function(){
+            alert('Enter Valid Expression');
+            screenValue = "";
+            screen.value = screenValue;
+        }
+
+        window.onBracketMultiplication = function(){
+            screenValue = addStr(screen.value,screen.value.indexof("("),"*");
+            screen.value = eval(screenValue);
+        } 
+        function addStr(str,index,stringToAdd){
+            return (str.substring(0,index) + stringToAdd + str.substring(index,str.length));
+        }
+        function checkforBracket() {
+    // Check if there's a number directly infront of a bracket
+            if (
+        screen.value.includes("(") &&
+        !isNaN(screen.value.charAt(screen.value.indexOf("(") - 1))
+             ) {
+            window.onBracketMultiplication();
+                return;
+            } else {
+            screen.value = eval(screenValue);
+    }
+
+}  
+    </script>
+</body>
+</html>
